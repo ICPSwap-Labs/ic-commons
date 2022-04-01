@@ -2,6 +2,7 @@ import Principal "mo:base/Principal";
 import SHA224 "mo:sha224/SHA224";
 import Nat8 "mo:base/Nat8";
 import Array "mo:base/Array";
+import Buffer "mo:base/Buffer";
 import Blob "mo:base/Blob";
 import CRC32 "./CRC32";
 import Char "mo:base/Char";
@@ -71,13 +72,13 @@ module {
      * Removes matched element in the array, returning the array which removed element.
      */
     public func arrayRemove<T>(arr: [T], item: T, equal: (T, T) -> Bool) : [T] {
-        var newArray : [T] = [];
+        var newArray : Buffer.Buffer<T> = Buffer.Buffer<T>(0);
         for (t : T in arr.vals()) {
             if (not equal(t, item)) {
-                newArray := Array.append<T>(newArray, [t]);
+                newArray.add(t);
             };
         };
-        return newArray;
+        return newArray.toArray();
     };
 
     /**
@@ -105,13 +106,13 @@ module {
         if (end > Nat.sub(size, 1)) {
             end := size - 1;
         };
-        var result: [T] = [];
+        var result: Buffer.Buffer<T> = Buffer.Buffer<T>(0);
         if (offset >= 0 and size > offset) {
             for (i in Iter.range(offset, end)) {
-                result := Array.append(result, [arr[i]]);
+                result.add(arr[i]);
             };
         };
-        return result;
+        return result.toArray();
     };
  
     /**
