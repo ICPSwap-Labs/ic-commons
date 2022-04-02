@@ -8,7 +8,7 @@ let
     [
       { name = "base"
       , repo = "https://github.com/dfinity/motoko-base"
-      , version = "dfx-0.7.2"
+      , version = "moc-0.6.24"
       , dependencies = [] : List Text
       }
     , { dependencies = [ "base" ]
