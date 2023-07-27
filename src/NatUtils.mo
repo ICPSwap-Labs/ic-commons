@@ -73,7 +73,7 @@ module {
     public func isZero(v: Nat) : Bool {
         Nat.equal(v, 0);
     };
-
+    
     public func add(a: Nat, b: Nat, bit: Nat): Nat {
         return (a + b) % (2 ** bit);
     };

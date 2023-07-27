@@ -1,5 +1,4 @@
 import Array "mo:base/Array";
-import Buffer "mo:base/Buffer";
 import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
 
@@ -21,13 +20,13 @@ module {
         let _bit: Nat32 = Nat32.fromNat(bit);
         assert((_bit & (_bit - 1)) == 0);
         var _x: Nat = x;
-        var arr: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        var arr: [Nat32] = [];
         while(_x > 0) {
             let remainder: Nat32 = Nat32.fromNat(_x % (2 ** bit));
-            arr.add(remainder);
+            arr := Array.append<Nat32>([remainder], arr);
             _x := bitshiftRight(_x, bit);
         };
-        return arr.toArray();
+        return arr;
     };
     
     private func _bit(x: Nat, y: Nat, fun: (x1: Nat32, y1: Nat32) -> Nat32, bit: Nat) : Nat {

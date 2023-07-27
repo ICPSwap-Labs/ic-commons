@@ -2,7 +2,6 @@ import List "mo:base/List";
 import Iter "mo:base/Iter";
 import Blob "mo:base/Blob";
 import Array "mo:base/Array";
-import Buffer "mo:base/Buffer";
 import Text "mo:base/Text";
 import Int "mo:base/Int";
 import Int8 "mo:base/Int8";
@@ -35,13 +34,13 @@ module {
         assert((_bit & (_bit - 1)) == 0);
 
         var _x: Int = x;
-        var arr: Buffer.Buffer<Int64> = Buffer.Buffer<Int64>(0);
+        var arr: [Int64] = [];
         while(_x > 0) {
             let remainder: Int64 = Int64.fromInt(_x % 2 ** bit);
-            arr.add(remainder);
+            arr := Array.append<Int64>([remainder], arr);
             _x := bitshiftRight(_x, bit);
         };
-        return arr.toArray();
+        return arr;
     };
     private func ternary(e: Bool, x: Int, y: Int) : Int {
         if (e) {

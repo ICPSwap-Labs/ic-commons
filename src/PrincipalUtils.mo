@@ -2,7 +2,6 @@ import Principal "mo:base/Principal";
 import SHA224 "mo:sha224/SHA224";
 import Nat8 "mo:base/Nat8";
 import Array "mo:base/Array";
-import Buffer "mo:base/Buffer";
 import Blob "mo:base/Blob";
 import Char "mo:base/Char";
 import List "mo:base/List";
@@ -29,9 +28,9 @@ module {
         let blob = Principal.toBlob(p);
         digest.write(Blob.toArray(blob));
         digest.write(Array.freeze<Nat8>(Array.init<Nat8>(32, 0 : Nat8))); // sub account
-        let hash_bytes : [Nat8] = digest.sum();
-        let crc : [Nat8] = CRC32.crc32(hash_bytes);
-        let aid_bytes = addAll<Nat8>(crc, hash_bytes);
+        let hash_bytes = digest.sum();
+        let crc = CRC32.crc32(hash_bytes);
+        let aid_bytes = Array.append<Nat8>(crc, hash_bytes);
 
         return TextUtils.encode(aid_bytes);
     };
@@ -46,7 +45,7 @@ module {
         digest.write(Array.freeze<Nat8>(Array.init<Nat8>(32, 0 : Nat8))); // sub account
         let hash_bytes = digest.sum();
         let crc = CRC32.crc32(hash_bytes);
-        let aid_bytes = addAll<Nat8>(crc, hash_bytes);
+        let aid_bytes = Array.append<Nat8>(crc, hash_bytes);
 
         return TextUtils.encode(aid_bytes);
     };
@@ -68,15 +67,4 @@ module {
         };
         return false;
     };
-
-    private func addAll<T>(a : [T], b : [T]) : [T] {
-        var result : Buffer.Buffer<T> = Buffer.Buffer<T>(0);
-        for (t : T in a.vals()) {
-            result.add(t);
-        };
-        for (t : T in b.vals()) {
-            result.add(t);
-        };
-        return result.toArray();
-    }
 };
